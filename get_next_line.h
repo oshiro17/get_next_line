@@ -2,4 +2,4 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-#  define BUFFER_SIZE 1024
+#  define BUFFER_SIZE 10

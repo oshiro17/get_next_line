@@ -1,30 +1,124 @@
 #include "get_next_line.h"
 #include <string.h>
 
-char *get_next_line(int fd)
+size_t	ft_strlen(const char *s, char escape)
 {
-    static char *mem;
-    char *line;
-    ssize_t len;
+	size_t	i;
 
-    line = malloc(sizeof(char) * BUFFER_SIZE);
-    if (line == NULL)
-        return (NULL);
-    len = read(fd,line,BUFFER_SIZE);
-    if(strchr(line,'\0'))
-        mem = strchr(line,'\0');
-    // while()
-    if (len == -1)
-        return (NULL);
-    return(line);
+	i = 0;
+	while (s[i] != escape)
+		i++;
+	return (i);
 }
 
-int main(void)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-    char *line;
-    int fd;
+	int		i;
+	char	*nstr;
+	int		length;
 
-    fd = open("test.txt", O_RDONLY);
-    line = get_next_line(fd);
-    printf("%s", line);
+	i = 0;
+	if (!s1 || !s2)
+		return (NULL);
+	length = ft_strlen((char *)s1, '\0') + ft_strlen((char *)s2, '\0');
+	nstr = (char *)malloc(sizeof(char) * (length + 1));
+	if (!nstr)
+		return (NULL);
+	while (*s1)
+		nstr[i++] = *s1++;
+	while (*s2)
+		nstr[i++] = *s2++;
+	nstr[i] = '\0';
+	return (nstr);
+}
+
+static char	*ft_strrchr(char *line, char c)
+{
+	int		i;
+
+	while (*line)
+	{
+		if (*line == c)
+			return (line);
+		line++;
+	}
+	return (NULL);
+}
+
+char	*ft_get_line(char *save)
+{
+	char	*to_line;
+	int		i;
+
+	i = 0;
+	to_line = (char *)malloc(ft_strlen(save, '\n') + 2);
+	if (!to_line)
+		return (NULL);
+	while (save[i] != '\n')
+	{	
+		to_line[i] = save[i];
+		i++;
+	}
+	to_line[i] = '\n';
+	return (to_line);
+}
+
+char	*ft_save(char *to_save)
+{
+	size_t	abond_len;
+	int 	i;
+	char	*save;
+
+	abond_len = ft_strlen(to_save,'\n');
+	if(!to_save[abond_len])
+	{
+		free(save);
+		return(NULL);
+	}
+	save = malloc((ft_strlen(save,'\0')) - abond_len + 1);
+	if (!save)
+		return(NULL);
+	abond_len++;
+	i = 0;
+	while (to_save[abond_len])
+		save[i] = to_save[abond_len];
+	free(to_save);
+	return(save);
+}
+
+char *get_next_line(int fd)
+{
+	char	*buff;
+	char	*line;
+	static char	*save;
+	ssize_t		len;
+
+	buff = malloc(BUFFER_SIZE);
+	while (!(ft_strrchr(save, '\n')) && len != 0)
+	{
+		len = read(fd, buff, BUFFER_SIZE);
+		buff[len] = '\0';
+		save = ft_strjoin(save, buff); 
+	}
+	free(buff);
+	line = ft_get_line(save);
+	save = ft_save(save);
+	return(save);
+}
+
+#include "get_next_line.h"
+
+int	main(void)
+{
+	printf("aiuek");
+	int		fd;
+	char	*line;
+
+	line = "";
+	fd = open("text.txt", O_RDONLY);
+	line = get_next_line(fd);
+	printf(" %s\n", line);
+	printf(" %s", line);
+	free(line);
+	return (0);
 }
