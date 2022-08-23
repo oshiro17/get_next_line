@@ -6,6 +6,8 @@ size_t	ft_strlen(const char *s, char escape)
 	size_t	i;
 
 	i = 0;
+	if (!s || !escape)
+		return(i);
 	while (s[i] != escape)
 		i++;
 	return (i);
@@ -13,37 +15,64 @@ size_t	ft_strlen(const char *s, char escape)
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	int		i;
+	size_t		i;
 	char	*nstr;
-	int		length;
+	size_t		length;
 
 	i = 0;
-	if (!s2)
+	if ((s1 == NULL) && (s2 == NULL))
 		return (NULL);
 	length = ft_strlen((char *)s1, '\0') + ft_strlen((char *)s2, '\0');
 	nstr = (char *)malloc(sizeof(char) * (length + 1));
 	if (!nstr)
 		return (NULL);
-	while (*s1)
-		nstr[i++] = *s1++;
-	while (*s2)
-		nstr[i++] = *s2++;
-	nstr[i] = '\0';
+	while (*s1 && i < length)
+	{
+		nstr[i] = *s1;
+		s1++;
+		i++;
+	}
+	while (*s2 && i < length)
+	{
+		nstr[i] = *s2;
+		s2++;
+		i++;
+	}
+	nstr[length] = '\0';
 	return (nstr);
 }
 
-static char	*ft_strrchr(char *line, char c)
-{
-	int		i;
+// static char	*ft_strrchr(char *line, char c)
+// {
+// 	int		i;
 
-	while (*line)
+// 	while (*line && line)
+// 	{
+// 		if (*line == c)
+// 			return (line);
+// 		line++;
+// 	}
+// 	return (NULL);
+// }
+
+char	*ft_strchr(char *s, int c)
+{
+	int	i;
+
+	i = 0;
+	if (!s)
+		return (0);
+	if (c == '\0')
+		return ((char *)&s[ft_strlen(s,'\0')]);
+	while (s[i] != '\0')
 	{
-		if (*line == c)
-			return (line);
-		line++;
+		if (s[i] == (char) c)
+			return ((char *)&s[i]);
+		i++;
 	}
-	return (NULL);
+	return (0);
 }
+
 
 char	*ft_get_line(char *save)
 {
@@ -60,6 +89,7 @@ char	*ft_get_line(char *save)
 		i++;
 	}
 	to_line[i] = '\n';
+	to_line[i + 1] = '\0';
 	return (to_line);
 }
 
@@ -69,7 +99,7 @@ char	*ft_save(char *to_save)
 	int 	i;
 	char	*save;
 
-	abond_len = ft_strlen(to_save,'\n');
+	abond_len = ft_strlen(to_save,'\0');
 	if(!to_save[abond_len])
 	{
 		free(save);
@@ -97,12 +127,16 @@ char *get_next_line(int fd)
 	buff = malloc(BUFFER_SIZE + 1);
 	if (!buff)
 		return(NULL);
-	while ((ft_strrchr(save, '\n')) == NULL && len != 0)
+	printf("111");fflush(stdout);
+	while ((ft_strchr(save, '\n')) == NULL && len != 0)
 	{
+		printf("whileはいったぜ");fflush(stdout);
 		len = read(fd, buff, BUFFER_SIZE);
+		printf("115");fflush(stdout);
 		buff[len] = '\0';
 		save = ft_strjoin(save, buff); 
 	}
+	printf("118");fflush(stdout);
 	free(buff);
 	line = ft_get_line(save);
 	save = ft_save(save);
@@ -114,6 +148,7 @@ int main(void)
 	char *line;
 	int fd;
 
+	printf("aaaa");fflush(stdout);
 	//fd = open("./gnl_instructions.txt", O_RDONLY);
 	//fd = open("./file.txt", O_RDONLY);
 	//fd = open("./num_even.txt", O_RDONLY);
