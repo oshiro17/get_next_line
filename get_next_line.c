@@ -136,7 +136,7 @@ char	*ft_save(char *to_save)
 		return(NULL);
 	abond_len = ft_strlen(to_save,'\n');
 	save = malloc((ft_strlen(to_save,'\0')) - abond_len + 1);
-	printf("ft_save save[%s]to_save[%d]\n",save,to_save[0]);
+	// printf("ft_save save[%s]to_save[%d]\n",save,to_save[0]);
 	if (!save)
 		return(NULL);
 	abond_len++;
@@ -147,7 +147,7 @@ char	*ft_save(char *to_save)
 		i++;
 	}
 	save[i] = '\0';
-	printf("ft_save save[%s]to_save[%d]\n",save,to_save[0]);
+	// printf("ft_save save[%s]to_save[%d]\n",save,to_save[0]);
 	free(to_save);
 	return(save);
 }
@@ -175,16 +175,16 @@ char *get_next_line(int fd)
 		}
 		buff[len] = '\0';
 		save = ft_strjoin(save, buff);
-		printf("save: [%s], buff: [%s]\n", save, buff);
+		// printf("save: [%s], buff: [%s]\n", save, buff);
 	}
 	free(buff);
 	if (!save)
 		return (NULL);
 	line = ft_get_line(save);
 	printf("1save: [%s] line: [%s]\n", save, line);
-	// fflush(stdout);
+	fflush(stdout);
 	save = ft_save(save);
-	printf("2. save: [%s] line: [%s]\n", save, line);
+	// printf("2. save: [%s] line: [%s]\n", save, line);
 	return(line);
 }
 
