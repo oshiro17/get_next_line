@@ -6,41 +6,74 @@ size_t	ft_strlen(const char *s, char escape)
 	size_t	i;
 
 	i = 0;
-	if (!s || !escape)
+	if (!s)
 		return(i);
 	while (s[i] != escape)
 		i++;
 	return (i);
 }
-
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
-	size_t		i;
-	char	*nstr;
-	size_t		length;
+	size_t	i;
+	size_t	c;
+	char	*str;
 
-	i = 0;
-	if ((s1 == NULL) && (s2 == NULL))
-		return (NULL);
-	length = ft_strlen((char *)s1, '\0') + ft_strlen((char *)s2, '\0');
-	nstr = (char *)malloc(sizeof(char) * (length + 1));
-	if (!nstr)
-		return (NULL);
-	while (*s1 && i < length)
+	if (!s1)
 	{
-		nstr[i] = *s1;
-		s1++;
-		i++;
+		s1 = (char *)malloc(1 * sizeof(char));
+		s1[0] = '\0';
 	}
-	while (*s2 && i < length)
+	if (!s1 || !s2)
+		return (NULL);
+	str = malloc((ft_strlen(s1,'\0') + ft_strlen(s2,'\0') + 1) * sizeof(char));
+	if (str == NULL)
+		return (NULL);
+	i = -1;
+	c = 0;
+	if (s1)
 	{
-		nstr[i] = *s2;
-		s2++;
-		i++;
+		while (s1[++i] != '\0')
+			str[i] = s1[i];
 	}
-	nstr[length] = '\0';
-	return (nstr);
+	while (s2[c] != '\0')
+		str[i++] = s2[c++];
+	str[ft_strlen(s1,'\0') + ft_strlen(s2,'\0')] = '\0';
+	free(s1);
+	return (str);
 }
+// char	*ft_strjoin(char const *s1, char const *s2)
+// {
+// 	size_t		i;
+// 	char	*nstr;
+// 	size_t		length;
+
+// 	printf("22");fflush(stdout);
+// 	i = 0;
+// 	if ((s1 == NULL) && (s2 == NULL))
+// 		return (NULL);
+// 	length = ft_strlen((char *)s1, '\0') + ft_strlen((char *)s2, '\0');
+// 	nstr = (char *)malloc(sizeof(char) * (length + 1));
+// 	if (!nstr)
+// 		return (NULL);
+// 	printf("30dayo");fflush(stdout);
+// 	if (*s1=! '\0' && i < ft_strlen((char *)s1, '\0'))
+// 	{
+// 		printf("%c",*s1);
+// 		fflush(stdout);
+// 		// nstr[i] = *s1;
+// 		// s1++;
+// 		// i++;
+// 	}
+// 	printf("37");fflush(stdout);
+// 	while (*s2 =! ''&& i < ft_strlen((char *)s2, '\0'))
+// 	{
+// 		nstr[i] = *s2;
+// 		s2++;
+// 		i++;
+// 	}
+// 	nstr[length] = '\0';
+// 	return (nstr);
+// }
 
 // static char	*ft_strrchr(char *line, char c)
 // {
@@ -99,19 +132,22 @@ char	*ft_save(char *to_save)
 	int 	i;
 	char	*save;
 
-	abond_len = ft_strlen(to_save,'\0');
-	if(!to_save[abond_len])
-	{
-		free(save);
+	if(!to_save)
 		return(NULL);
-	}
-	save = malloc((ft_strlen(save,'\0')) - abond_len + 1);
+	abond_len = ft_strlen(to_save,'\n');
+	save = malloc((ft_strlen(to_save,'\0')) - abond_len + 1);
+	printf("ft_save save[%s]to_save[%d]\n",save,to_save[0]);
 	if (!save)
 		return(NULL);
 	abond_len++;
 	i = 0;
-	while (to_save[abond_len])
-		save[i] = to_save[abond_len];
+	while (to_save[abond_len + i])
+	{
+		save[i] = to_save[abond_len + i];
+		i++;
+	}
+	save[i] = '\0';
+	printf("ft_save save[%s]to_save[%d]\n",save,to_save[0]);
 	free(to_save);
 	return(save);
 }
@@ -123,77 +159,47 @@ char *get_next_line(int fd)
 	static char	*save;
 	ssize_t		len;
 
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (0);
 	len = 1;
 	buff = malloc(BUFFER_SIZE + 1);
 	if (!buff)
 		return(NULL);
-	printf("111");fflush(stdout);
-	while ((ft_strchr(save, '\n')) == NULL && len != 0)
+	while (!(ft_strchr(save, '\n')) && len != 0)
 	{
-		printf("whileはいったぜ");fflush(stdout);
 		len = read(fd, buff, BUFFER_SIZE);
-		printf("115");fflush(stdout);
+		if (len == -1)
+		{
+			free(buff);
+			return (NULL);
+		}
 		buff[len] = '\0';
-		save = ft_strjoin(save, buff); 
+		save = ft_strjoin(save, buff);
+		printf("save: [%s], buff: [%s]\n", save, buff);
 	}
-	printf("118");fflush(stdout);
 	free(buff);
+	if (!save)
+		return (NULL);
 	line = ft_get_line(save);
+	printf("1save: [%s] line: [%s]\n", save, line);
+	// fflush(stdout);
 	save = ft_save(save);
-	return(save);
+	printf("2. save: [%s] line: [%s]\n", save, line);
+	return(line);
 }
 
-int main(void)
+int	main(void)
 {
-	char *line;
-	int fd;
+	int		fd;
+	char	*line;
 
-	printf("aaaa");fflush(stdout);
-	//fd = open("./gnl_instructions.txt", O_RDONLY);
-	//fd = open("./file.txt", O_RDONLY);
-	//fd = open("./num_even.txt", O_RDONLY);
+	line = "";
 	fd = open("file.txt", O_RDONLY);
-	//fd = open("./41_with_nl", O_RDONLY);
-	//fd = open("./43_no_nl", O_RDONLY);
-	//line = ft_substr("", 0, 0);
-	//while (line)
-	//{
-	//	line = get_next_line(fd);
-	//	printf("line : %s", line); 
-	//	free (line);
-	//}
-	//line = get_next_line(1000);
-	//printf("line : %s", line); 
-	//free (line);
-	//line = get_next_line(-1);
-	//printf("line : %s", line); 
-	//free (line);
-	line = get_next_line(fd);
-	printf("line : %s", line); 
-	free (line);
-	line = get_next_line(fd);
-	printf("line : %s", line); 
-	free (line);
-	line = get_next_line(fd);
-	printf("line : %s", line); 
-	free (line);
-	line = get_next_line(fd);
-	printf("line : %s", line); 
-	free (line);
-	line = get_next_line(fd);
-	printf("line : %s", line); 
-	free (line);
-	line = get_next_line(fd);
-	printf("line : %s", line); 
-	free (line);
-	line = get_next_line(fd);
-	printf("line : %s", line); 
-	free (line);
-	line = get_next_line(fd);
-	printf("line : %s", line); 
-	free (line);
-	line = get_next_line(fd);
-	printf("line : %s", line); 
-	free (line);
-	return 0;
+	while (line)
+	{
+		line = get_next_line(fd);
+		printf("> %s", line);
+		free(line);
+	}
+	return (0);
 }
