@@ -12,6 +12,7 @@ size_t	ft_strlen(const char *s, char escape)
 		i++;
 	return (i);
 }
+
 char	*ft_strjoin(char *s1, char *s2)
 {
 	size_t	i;
@@ -41,52 +42,6 @@ char	*ft_strjoin(char *s1, char *s2)
 	free(s1);
 	return (str);
 }
-// char	*ft_strjoin(char const *s1, char const *s2)
-// {
-// 	size_t		i;
-// 	char	*nstr;
-// 	size_t		length;
-
-// 	printf("22");fflush(stdout);
-// 	i = 0;
-// 	if ((s1 == NULL) && (s2 == NULL))
-// 		return (NULL);
-// 	length = ft_strlen((char *)s1, '\0') + ft_strlen((char *)s2, '\0');
-// 	nstr = (char *)malloc(sizeof(char) * (length + 1));
-// 	if (!nstr)
-// 		return (NULL);
-// 	printf("30dayo");fflush(stdout);
-// 	if (*s1=! '\0' && i < ft_strlen((char *)s1, '\0'))
-// 	{
-// 		printf("%c",*s1);
-// 		fflush(stdout);
-// 		// nstr[i] = *s1;
-// 		// s1++;
-// 		// i++;
-// 	}
-// 	printf("37");fflush(stdout);
-// 	while (*s2 =! ''&& i < ft_strlen((char *)s2, '\0'))
-// 	{
-// 		nstr[i] = *s2;
-// 		s2++;
-// 		i++;
-// 	}
-// 	nstr[length] = '\0';
-// 	return (nstr);
-// }
-
-// static char	*ft_strrchr(char *line, char c)
-// {
-// 	int		i;
-
-// 	while (*line && line)
-// 	{
-// 		if (*line == c)
-// 			return (line);
-// 		line++;
-// 	}
-// 	return (NULL);
-// }
 
 char	*ft_strchr(char *s, int c)
 {
@@ -106,50 +61,79 @@ char	*ft_strchr(char *s, int c)
 	return (0);
 }
 
-
 char	*ft_get_line(char *save)
 {
-	char	*to_line;
 	int		i;
+	char	*to_line;
 
-	i = 0;
-	to_line = (char *)malloc(ft_strlen(save, '\n') + 2);
+	if (!save[0])
+		return (NULL);
+	to_line = (char *)malloc(sizeof(char) * ((ft_strlen(save,'\n')) + 2));
 	if (!to_line)
 		return (NULL);
-	while (save[i] != '\n')
-	{	
+	i = 0;
+	while (save[i] && save[i] != '\n')
+	{
 		to_line[i] = save[i];
 		i++;
 	}
-	to_line[i] = '\n';
-	to_line[i + 1] = '\0';
-	return (to_line);
-}
-
-char	*ft_save(char *to_save)
-{
-	size_t	abond_len;
-	int 	i;
-	char	*save;
-
-	if(!to_save)
-		return(NULL);
-	abond_len = ft_strlen(to_save,'\n');
-	save = malloc((ft_strlen(to_save,'\0')) - abond_len + 1);
-	// printf("ft_save save[%s]to_save[%d]\n",save,to_save[0]);
-	if (!save)
-		return(NULL);
-	abond_len++;
-	i = 0;
-	while (to_save[abond_len + i])
+	if (save[i] == '\n')
 	{
-		save[i] = to_save[abond_len + i];
+		to_line[i] = save[i];
 		i++;
 	}
-	save[i] = '\0';
-	// printf("ft_save save[%s]to_save[%d]\n",save,to_save[0]);
-	free(to_save);
-	return(save);
+	to_line[i] = '\0';
+	return (to_line);
+}
+// char	*ft_get_line(char *save)
+// {
+// 	char	*to_line;
+// 	int		i;
+
+// 	i = 0;
+// 	if (!to_line[0])
+// 		return (NULL);
+// 	to_line = (char *)malloc(ft_strlen(save, '\n') + 2);
+// 	if (!to_line)
+// 		return (NULL);
+// 	while (save[i] && save[i] != '\n')
+// 	{
+// 		to_line[i] = save[i];
+// 		i++;
+// 	}
+// 	if (save[i] == '\n')
+// 	{
+// 		to_line[i] = save[i];
+// 		i++;
+// 	}
+// 	to_line[i] = '\0';
+// 	return (to_line);
+// }
+
+char	*ft_save(char *save)
+{
+	int		i;
+	int		c;
+	char	*s;
+
+	i = 0;
+	while (save[i] && save[i] != '\n')
+		i++;
+	if (!save[i])
+	{
+		free(save);
+		return (NULL);
+	}
+	s = (char *)malloc(sizeof(char) * (ft_strlen(save,'\0') - i + 1));
+	if (!s)
+		return (NULL);
+	i++;
+	c = 0;
+	while (save[i])
+		s[c++] = save[i++];
+	s[c] = '\0';
+	free(save);
+	return (s);
 }
 
 char *get_next_line(int fd)
@@ -181,8 +165,8 @@ char *get_next_line(int fd)
 	if (!save)
 		return (NULL);
 	line = ft_get_line(save);
-	printf("1save: [%s] line: [%s]\n", save, line);
-	fflush(stdout);
+	// printf("1save: [%s] line: [%s]\n", save, line);
+	// fflush(stdout);
 	save = ft_save(save);
 	// printf("2. save: [%s] line: [%s]\n", save, line);
 	return(line);
@@ -195,11 +179,20 @@ int	main(void)
 
 	line = "";
 	fd = open("file.txt", O_RDONLY);
-	while (line)
-	{
+	// while( get_next_line(fd))
+	// {
+	line = get_next_line(fd);
+	printf("> %s", line);
+	free(line);
+	// }
+	line = get_next_line(fd);
+	printf("> %s", line);
+	free(line);
+	line = get_next_line(fd);
+	printf("> %s", line);
+	free(line);
 		line = get_next_line(fd);
-		printf("> %s", line);
-		free(line);
-	}
+	printf("> %s", line);
+	free(line);
 	return (0);
 }
