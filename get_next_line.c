@@ -5,12 +5,20 @@ char	*ft_get_line(char *save)
 	int		i;
 	char	*to_line;
 
+	ft_strlen(save,'\n');
+	printf("[test]\n");
+	fflush(stdout);
+	ft_strlen(save,'\n');
 	if (!save[0])
 		return (NULL);
-	to_line = (char *)malloc(sizeof(char) * ((ft_strlen(save,'\n')) + 2));
+	to_line = (char *)malloc(sizeof(char) * ((ft_strlen(save,'\n')) + 1));
+
+	printf("[hi]\n");
+	fflush(stdout);
 	if (!to_line)
 		return (NULL);
 	i = 0;
+
 	while (save[i] && save[i] != '\n')
 	{
 		to_line[i] = save[i];
@@ -22,6 +30,7 @@ char	*ft_get_line(char *save)
 		i++;
 	}
 	to_line[i] = '\0';
+
 	return (to_line);
 }
 
@@ -55,16 +64,16 @@ char *get_next_line(int fd)
 {
 	char	*buff;
 	char	*line;
-	static char	*save[257];
+	static char	*save[256];
 	ssize_t		len;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || fd > 256)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd > 255)
 		return (0);
 	len = 1;
 	buff = malloc(BUFFER_SIZE + 1);
 	if (!buff)
 		return(NULL);
-	while (!(ft_strchr(save[fd], '\n')) && len != 0)
+	while (!(ft_strchr(save[fd], '\n')) && len > 0)
 	{
 		len = read(fd, buff, BUFFER_SIZE);
 		if (len == -1)
@@ -74,7 +83,10 @@ char *get_next_line(int fd)
 		}
 		buff[len] = '\0';
 		save[fd] = ft_strjoin(save[fd], buff);
-		// printf("save: [%s], buff: [%s]\n", save, buff);
+		printf("save: [%s], buff: [%s]\n", save[fd], buff);
+		if(*buff == '\0')
+			break;
+		fflush(stdout);
 	}
 	free(buff);
 	if (!save[fd])
@@ -87,19 +99,21 @@ char *get_next_line(int fd)
 	return(line);
 }
 
-// int	main(void)
-// {
-// 	int		fd;
-// 	char	*line;
-// 	line = "";
-// 	fd = open("file.txt", O_RDONLY);
+int	main(void)
+{
+	int		fd;
+	char	*line;
+	line = "";
+	fd = open("file.txt", O_RDONLY);
+	printf("%d",fd);
 
-// 	while(line)
-// 	{
-// 		line = get_next_line(fd);
-// 		printf("> %s", line);
-// 		free(line);
-// 	}
-// 	free(line);
-// 	return (0);
-// }
+	while(line)
+	{
+		line = get_next_line(fd);
+		if (line)
+			printf("> %s", line);
+		free(line);
+	}
+	free(line);
+	return (0);
+}
