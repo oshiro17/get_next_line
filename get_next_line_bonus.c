@@ -6,7 +6,7 @@
 /*   By: noshiro <noshiro@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/05 06:14:33 by noshiro           #+#    #+#             */
-/*   Updated: 2022/09/05 07:07:40 by noshiro          ###   ########.fr       */
+/*   Updated: 2022/09/10 16:46:24 by noshiro          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ char	*ft_get_line(char *save)
 
 	if (!save[0])
 		return (NULL);
-	to_line = (char *)malloc(sizeof(char) * ((ft_strlen(save, '\n')) + 1));
+	if (ft_strchr(save, '\n'))
+		to_line = (char *)malloc(ft_strchr(save, '\n') - save + 2);
+	else
+		to_line = (char *)malloc(ft_strlen(save) + 1);
 	if (!to_line)
 		return (NULL);
 	i = 0;
@@ -51,7 +54,7 @@ char	*ft_save(char *save)
 		free(save);
 		return (NULL);
 	}
-	s = (char *)malloc(sizeof(char) * (ft_strlen(save, '\0') - i + 1));
+	s = (char *)malloc(sizeof(char) * (ft_strlen(save) - i + 1));
 	if (!s)
 		return (NULL);
 	i++;
@@ -93,7 +96,7 @@ char	*get_next_line(int fd)
 	static char	*save[256];
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || fd > 255)
-		return (0);
+		return (NULL);
 	save[fd] = buff_to_save(save[fd], fd);
 	if (!save[fd])
 		return (NULL);
@@ -101,3 +104,18 @@ char	*get_next_line(int fd)
 	save[fd] = ft_save(save[fd]);
 	return (line);
 }
+
+// int main(void)
+// {
+// 	int fd ;
+// 	char *line;
+
+// 	fd = open("file.txt",O_RDONLY);
+// 	while(line)
+// 	{
+// 		line = get_next_line(fd);
+// 		printf("%s",line);
+// 		free(line);
+// 	}
+// 	return(0);
+// }

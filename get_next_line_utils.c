@@ -6,20 +6,18 @@
 /*   By: noshiro <noshiro@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/05 06:23:17 by noshiro           #+#    #+#             */
-/*   Updated: 2022/09/05 07:03:03 by noshiro          ###   ########.fr       */
+/*   Updated: 2022/09/10 16:48:12 by noshiro          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s, char escape)
+size_t	ft_strlen(const char *s)
 {
 	size_t	i;
 
 	i = 0;
-	if (!s)
-		return (i);
-	while (s[i] && s[i] != escape)
+	while (s[i] && s[i] != '\0')
 		i++;
 	return (i);
 }
@@ -37,7 +35,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	}
 	if (!s1 || !s2)
 		return (NULL);
-	str = malloc(ft_strlen(s1, '\0') + ft_strlen(s2, '\0') + 1);
+	str = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (str == NULL)
 		return (NULL);
 	i = 0;
@@ -47,7 +45,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	c = 0;
 	while (s2 && s2[c] != '\0')
 		str[i++] = s2[c++];
-	str[ft_strlen(s1, '\0') + ft_strlen(s2, '\0')] = '\0';
+	str[ft_strlen(s1) + ft_strlen(s2)] = '\0';
 	free(s1);
 	return (str);
 }
@@ -60,7 +58,7 @@ char	*ft_strchr(char *s, int c)
 	if (!s)
 		return (0);
 	if (c == '\0')
-		return ((char *)&s[ft_strlen(s, '\0')]);
+		return ((char *)&s[ft_strlen(s)]);
 	while (s[i] != '\0')
 	{
 		if (s[i] == (char) c)

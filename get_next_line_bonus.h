@@ -6,7 +6,7 @@
 /*   By: noshiro <noshiro@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/05 06:26:25 by noshiro           #+#    #+#             */
-/*   Updated: 2022/09/05 07:06:28 by noshiro          ###   ########.fr       */
+/*   Updated: 2022/09/09 23:07:27 by noshiro          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 #  define BUFFER_SIZE 1000
 # endif
 
-size_t	ft_strlen(const char *s, char escape);
+size_t	ft_strlen(const char *s);
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_strchr(char *s, int c);
 char	*ft_get_line(char *save);
