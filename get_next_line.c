@@ -72,7 +72,7 @@ char	*buff_to_save(char *save, int fd)
 	char	*buff;
 
 	len = 1;
-	buff = malloc(BUFFER_SIZE + 1);
+	buff = malloc(BUFFER_SIZE + 1UL);
 	if (!buff)
 		return (NULL);
 	while (!(ft_strchr(save, '\n')) && len > 0)
@@ -108,13 +108,16 @@ char	*get_next_line(int fd)
 // int main(void)
 // {
 // 	int fd ;
+// 	int i;
 // 	char *line;
 
+// 	i = 0;
 // 	fd = open("file.txt",O_RDONLY);
-// 	while(line)
+// 	while(i < 10)
 // 	{
 // 		line = get_next_line(fd);
-// 		printf("%s",line);
+// 		printf("%d[%s]",i,line);
+// 		i--;
 // 		free(line);
 // 	}
 // 	return(0);
