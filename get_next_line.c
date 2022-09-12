@@ -54,10 +54,12 @@ char	*ft_save(char *save)
 		free(save);
 		return (NULL);
 	}
-	s = (char *)malloc(sizeof(char) * (ft_strlen(save) - i + 1));
+	s = (char *)malloc(ft_strlen(save) - i + 1);
 	if (!s)
+	{
 		free(save);
 		return (NULL);
+	}
 	i++;
 	c = 0;
 	while (save[i])
@@ -104,26 +106,21 @@ char	*get_next_line(int fd)
 	if (!save[fd])
 		return (NULL);
 	line = ft_get_line(save[fd]);
-	if(!line)
-		return(NULL);
 	save[fd] = ft_save(save[fd]);
 	return (line);
 }
 
-int main(void)
-{
-	int fd ;
-	char *line;
-	int i;
-	
-	i = 0;
-	fd = open("file.txt",O_RDONLY);
-	while(i < 10)
-	{
-		line = get_next_line(fd);
-		printf("%d[%s]",i,line);
-		i++;
-		free(line);
-	}
-	return(0);
-}
+// int main(void)
+// {
+// 	int fd ;
+// 	char *line;
+
+// 	fd = open("file.txt",O_RDONLY);
+// 	while(line)
+// 	{
+// 		line = get_next_line(fd);
+// 		printf("%s",line);
+// 		free(line);
+// 	}
+// 	return(0);
+// }
