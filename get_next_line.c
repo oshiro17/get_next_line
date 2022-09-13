@@ -12,21 +12,27 @@
 
 #include "get_next_line.h"
 
-char	*ft_get_line(char *save, char *to_line)
+// save = "aaa\nbbb\0"
+// save = "\0\0\0\0\0\0\0\0\0"
+
+char	*ft_get_line(char *save)
 {
 	int		i;
 	char	*to_line;
 
-	// if (!save[0])
-	// 	return (NULL);
-	// if (ft_strchr(save, '\n'))
-	// 	to_line = (char *)malloc(ft_strchr(save, '\n') - save + 2);
-	// else
-	// 	to_line = (char *)malloc(ft_strlen(save) + 1);
-	// if (!to_line)
-	// 	return (NULL);
+	if (!save[0])
+		return (NULL);
+	if (ft_strchr(save, '\n'))
+		to_line = (char *)malloc(ft_strchr(save, '\n') - save + 2);
+	else
+		to_line = (char *)malloc(ft_strlen(save) + 1);
+	if (!to_line)
+	{	
+		free(save);
+		save = NULL;
+		return (NULL);
+	}
 	i = 0;
-	// save == null
 	while (save[i] && save[i] != '\n')
 	{
 		to_line[i] = save[i];
@@ -41,12 +47,14 @@ char	*ft_get_line(char *save, char *to_line)
 	return (to_line);
 }
 
-char	*ft_save(char *save)
+char	*ft_save(char *save, char *line)
 {
 	int		i;
 	int		c;
 	char	*s;
 
+	if(!save)
+		return(NULL);
 	i = 0;
 	while (save[i] && save[i] != '\n')
 		i++;
@@ -59,6 +67,8 @@ char	*ft_save(char *save)
 	if (!s)
 	{
 		free(save);
+		free(line);
+		line = NULL;
 		return (NULL);
 	}
 	i++;
@@ -100,31 +110,14 @@ char	*get_next_line(int fd)
 {
 	char		*line;
 	static char	*save[256];
-	char		*to_line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || fd > 255)
 		return (NULL);
 	save[fd] = buff_to_save(save[fd], fd);
 	if (!save[fd])
 		return (NULL);
-	if (!save[fd][0])
-		return (NULL);
-	if (ft_strchr(save[fd], '\n'))
-		to_line = (char *)malloc(ft_strchr(save[fd], '\n') - save + 2);
-	else
-		to_line = (char *)malloc(ft_strlen(save[fd]) + 1);
-	if (!to_line)
-	{
-		free(save[fd]);
-		return (NULL);
-	}
 	line = ft_get_line(save[fd]);
-	// if (!line)
-	// {
-	// 	free(save);
-	// 	return(NULL);
-	// }
-	save[fd] = ft_save(save[fd]);
+	save[fd] = ft_save(save[fd],line);
 	return (line);
 }
 
@@ -142,3 +135,4 @@ char	*get_next_line(int fd)
 // 	}
 // 	return(0);
 // }
+
