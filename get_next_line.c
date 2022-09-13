@@ -26,6 +26,7 @@ char	*ft_get_line(char *save)
 	if (!to_line)
 		return (NULL);
 	i = 0;
+	// save == null
 	while (save[i] && save[i] != '\n')
 	{
 		to_line[i] = save[i];
@@ -106,6 +107,11 @@ char	*get_next_line(int fd)
 	if (!save[fd])
 		return (NULL);
 	line = ft_get_line(save[fd]);
+	// if (!line)
+	// {
+	// 	free(save);
+	// 	return(NULL);
+	// }
 	save[fd] = ft_save(save[fd]);
 	return (line);
 }
