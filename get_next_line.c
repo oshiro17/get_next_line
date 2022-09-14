@@ -12,6 +12,13 @@
 
 #include "get_next_line.h"
 
+char	*free_null(char **line)
+{
+	free(*line);
+	*line = NULL;
+	return (NULL);
+}
+
 char	*ft_get_line(char *save)
 {
 	int		i;
@@ -24,11 +31,7 @@ char	*ft_get_line(char *save)
 	else
 		to_line = (char *)malloc(ft_strlen(save) + 1);
 	if (!to_line)
-	{	
-		free(save);
-		save = NULL;
-		return (NULL);
-	}
+		return(free_null(&save));
 	i = 0;
 	while (save[i] && save[i] != '\n')
 	{
@@ -37,7 +40,7 @@ char	*ft_get_line(char *save)
 	}
 	if (save[i] == '\n')
 	{
-		to_line[i] = save[i];
+		to_line[i] = save[i++];
 		i++;
 	}
 	to_line[i] = '\0';
@@ -56,17 +59,12 @@ char	*ft_save(char *save, char **line)
 	while (save[i] && save[i] != '\n')
 		i++;
 	if (!save[i])
-	{
-		free(save);
-		return (NULL);
-	}
+		return (free_null(&save));
 	s = (char *)malloc(ft_strlen(save) - i + 1);
 	if (!s)
 	{
-		free(save);
-		free(*line);
-		*line = NULL;
-		return (NULL);
+		free_null(&save);
+		return (free_null(line));
 	}
 	i++;
 	c = 0;
@@ -118,17 +116,16 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-int main(void)
-{
-	int fd ;
-	char *line;
+// int main(void)
+// {
+// 	int fd ;
+// 	char *line;
 
-	fd = open("file.txt",O_RDONLY);
+// 	fd = open("file.txt",O_RDONLY);
 
-	line = get_next_line(fd);
-	printf("%s",line);
-	free(line);
+// 	line = get_next_line(fd);
+// 	printf("%s",line);
+// 	free(line);
 
-	return(0);
-}
-
+// 	return(0);
+// }

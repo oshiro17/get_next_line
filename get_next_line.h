@@ -30,5 +30,6 @@ char	*ft_get_line(char *save);
 char	*ft_save(char *save, char **line);
 char	*get_next_line(int fd);
 char	*buff_to_save(char *save, int fd);
+char    *free_null(char **line);
 
 #endif
