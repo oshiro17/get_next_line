@@ -71,7 +71,7 @@ char	*ft_save(char *save, char **line)
 	while (save[i])
 		s[c++] = save[i++];
 	s[c] = '\0';
-	free(save);
+	free_null(&save);
 	return (s);
 }
 
