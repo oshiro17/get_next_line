@@ -6,7 +6,7 @@
 /*   By: noshiro <noshiro@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/05 06:14:33 by noshiro           #+#    #+#             */
-/*   Updated: 2022/09/09 23:56:36 by noshiro          ###   ########.fr       */
+/*   Updated: 2022/09/15 06:55:47 by noshiro          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*ft_get_line(char *save)
 	else
 		to_line = (char *)malloc(ft_strlen(save) + 1);
 	if (!to_line)
-		return(free_null(&save));
+		return (free_null(&save));
 	i = 0;
 	while (save[i] && save[i] != '\n')
 	{
@@ -40,7 +40,7 @@ char	*ft_get_line(char *save)
 	}
 	if (save[i] == '\n')
 	{
-		to_line[i] = save[i++];
+		to_line[i] = save[i];
 		i++;
 	}
 	to_line[i] = '\0';
@@ -53,8 +53,8 @@ char	*ft_save(char *save, char **line)
 	int		c;
 	char	*s;
 
-	if(!save)
-		return(NULL);
+	if (!save)
+		return (NULL);
 	i = 0;
 	while (save[i] && save[i] != '\n')
 		i++;
@@ -88,16 +88,13 @@ char	*buff_to_save(char *save, int fd)
 	{
 		len = read(fd, buff, BUFFER_SIZE);
 		if (len == -1)
-		{	
-			free (buff);
-			return (NULL);
-		}
+			return (free_null(buff));
 		buff[len] = '\0';
 		save = ft_strjoin(save, buff);
 		if (!save)
-			break;
+			break ;
 	}
-	free(buff);
+	free_null(buff);
 	return (save);
 }
 
