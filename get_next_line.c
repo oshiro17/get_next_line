@@ -12,9 +12,6 @@
 
 #include "get_next_line.h"
 
-// save = "aaa\nbbb\0"
-// save = "\0\0\0\0\0\0\0\0\0"
-
 char	*ft_get_line(char *save)
 {
 	int		i;
@@ -47,7 +44,7 @@ char	*ft_get_line(char *save)
 	return (to_line);
 }
 
-char	*ft_save(char *save, char *line)
+char	*ft_save(char *save, char **line)
 {
 	int		i;
 	int		c;
@@ -67,8 +64,8 @@ char	*ft_save(char *save, char *line)
 	if (!s)
 	{
 		free(save);
-		free(line);
-		line = NULL;
+		free(*line);
+		*line = NULL;
 		return (NULL);
 	}
 	i++;
@@ -117,22 +114,21 @@ char	*get_next_line(int fd)
 	if (!save[fd])
 		return (NULL);
 	line = ft_get_line(save[fd]);
-	save[fd] = ft_save(save[fd],line);
+	save[fd] = ft_save(save[fd], &line);
 	return (line);
 }
 
-// int main(void)
-// {
-// 	int fd ;
-// 	char *line;
+int main(void)
+{
+	int fd ;
+	char *line;
 
-// 	fd = open("file.txt",O_RDONLY);
-// 	while(line)
-// 	{
-// 		line = get_next_line(fd);
-// 		printf("%s",line);
-// 		free(line);
-// 	}
-// 	return(0);
-// }
+	fd = open("file.txt",O_RDONLY);
+
+	line = get_next_line(fd);
+	printf("%s",line);
+	free(line);
+
+	return(0);
+}
 
