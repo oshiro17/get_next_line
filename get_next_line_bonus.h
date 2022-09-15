@@ -6,7 +6,7 @@
 /*   By: noshiro <noshiro@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/05 06:26:25 by noshiro           #+#    #+#             */
-/*   Updated: 2022/09/15 09:00:07 by noshiro          ###   ########.fr       */
+/*   Updated: 2022/09/15 09:11:59 by noshiro          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,7 @@
 size_t	ft_strlen(const char *s);
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_strchr(char *s, int c);
-char	*ft_get_line(char *save);
-char	*ft_save(char *save, char **line);
 char	*get_next_line(int fd);
-char	*buff_to_save(char *save, int fd);
 char	*free_null(char **line);
 
 #endif

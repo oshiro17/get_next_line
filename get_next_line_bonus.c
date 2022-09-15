@@ -6,7 +6,7 @@
 /*   By: noshiro <noshiro@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/05 06:14:33 by noshiro           #+#    #+#             */
-/*   Updated: 2022/09/15 08:59:37 by noshiro          ###   ########.fr       */
+/*   Updated: 2022/09/15 09:12:42 by noshiro          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*free_null(char **line)
 	return (NULL);
 }
 
-char	*ft_get_line(char *save)
+static char	*ft_get_line(char *save)
 {
 	int		i;
 	char	*to_line;
@@ -47,7 +47,7 @@ char	*ft_get_line(char *save)
 	return (to_line);
 }
 
-char	*ft_save(char *save, char **line)
+static char	*ft_save(char *save, char **line)
 {
 	int		i;
 	int		c;
@@ -75,7 +75,7 @@ char	*ft_save(char *save, char **line)
 	return (s);
 }
 
-char	*buff_to_save(char *save, int fd)
+static char	*buff_to_save(char *save, int fd)
 {
 	ssize_t	len;
 	char	*buff;
