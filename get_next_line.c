@@ -6,7 +6,7 @@
 /*   By: noshiro <noshiro@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/05 06:14:33 by noshiro           #+#    #+#             */
-/*   Updated: 2022/09/15 06:55:47 by noshiro          ###   ########.fr       */
+/*   Updated: 2022/09/15 08:58:57 by noshiro          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,13 +88,13 @@ char	*buff_to_save(char *save, int fd)
 	{
 		len = read(fd, buff, BUFFER_SIZE);
 		if (len == -1)
-			return (free_null(buff));
+			return (free_null(&buff));
 		buff[len] = '\0';
 		save = ft_strjoin(save, buff);
 		if (!save)
 			break ;
 	}
-	free_null(buff);
+	free_null(&buff);
 	return (save);
 }
 
@@ -119,10 +119,11 @@ char	*get_next_line(int fd)
 // 	char *line;
 
 // 	fd = open("file.txt",O_RDONLY);
-
+// while(line)
+// {
 // 	line = get_next_line(fd);
 // 	printf("%s",line);
 // 	free(line);
-
+// }
 // 	return(0);
 // }

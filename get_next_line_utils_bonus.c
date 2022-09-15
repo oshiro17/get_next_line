@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: noshiro <noshiro@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/05 06:23:17 by noshiro           #+#    #+#             */
-/*   Updated: 2022/09/10 16:48:01 by noshiro          ###   ########.fr       */
+/*   Created: 2022/09/15 08:14:30 by noshiro           #+#    #+#             */
+/*   Updated: 2022/09/15 08:32:02 by noshiro          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ size_t	ft_strlen(const char *s)
 	size_t	i;
 
 	i = 0;
-	while (s[i] && s[i] != '\0')
+	while (s && s[i] != '\0')
 		i++;
 	return (i);
 }
@@ -46,7 +46,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	while (s2 && s2[c] != '\0')
 		str[i++] = s2[c++];
 	str[ft_strlen(s1) + ft_strlen(s2)] = '\0';
-	free(s1);
+	free_null(&s1);
 	return (str);
 }
 
